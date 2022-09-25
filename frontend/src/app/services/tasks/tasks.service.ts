@@ -12,20 +12,11 @@ import { supplant } from 'src/utils';
 })
 export class TasksService {
 
-  public tasksList$: BehaviorSubject<Task[]> = new BehaviorSubject([]);
-
   constructor(private readonly http: HttpClient) { }
 
   getTasks(): Observable<Task[]> {
     const url = BASE_URL + GET_TASKS_ENDPOINT;
-    this.tasksList$.next(MOCKED_TASKS_LIST);
-    return of(MOCKED_TASKS_LIST);
-    return this.http.get<Task[]>(url).pipe(
-      map(data => {
-        this.tasksList$.next(data);
-        return data;
-      })
-    );
+    return this.http.get<Task[]>(url);
   }
 
   deleteTask(task_id: string): Observable<any> {
@@ -44,14 +35,14 @@ export class TasksService {
   }
 }
 
-const MOCKED_TASKS_LIST: Task[] = [{
-  id: '001',
-  description: 'Daily meeting at 9.00',
-  status: false }, {
-  id: '002',
-  description: 'Check merge requests on integration',
-  status: false }, {
-  id: '003',
-  description: 'Develop topic 005789 - Tools and parameters',
-  status: true }
-];
+// const MOCKED_TASKS_LIST: Task[] = [{
+//   id: '001',
+//   description: 'Daily meeting at 9.00',
+//   status: false }, {
+//   id: '002',
+//   description: 'Check merge requests on integration',
+//   status: false }, {
+//   id: '003',
+//   description: 'Develop topic 005789 - Tools and parameters',
+//   status: true }
+// ];

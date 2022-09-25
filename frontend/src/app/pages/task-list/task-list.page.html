@@ -14,8 +14,10 @@
     <ion-label>Personal List:</ion-label>
   </ion-item>
   <ion-list>
-    <ion-item *ngFor="let task of (tasks$ | async)" text-wrap>
-      <ion-checkbox slot="start" [(ngModel)]="task.status" (ionChange)="updateTaskStatus(task)"></ion-checkbox>
+    <ion-item *ngIf="!tasks?.length"> 
+      <ion-icon name="information-circle" slot="start"></ion-icon>Add your first task to the list</ion-item>
+    <ion-item *ngFor="let task of tasks" text-wrap>
+      <ion-checkbox slot="start" [checked]="task.status" (ionChange)="updateTaskStatus(task)"></ion-checkbox>
       <ion-label text-wrap>{{ task.description }}</ion-label>
       <ion-button slot="end" expand="block" shape="round" size="small" color="danger" (click)="deleteTask(task.id)"><ion-icon name="trash-outline"></ion-icon></ion-button>
     </ion-item>

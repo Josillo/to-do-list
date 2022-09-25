@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab horizontal="end" vertical="top" slot="fixed" edge>
+    <ion-fab-button (click)="openAddModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-item>
+    <ion-label>Personal List:</ion-label>
+  </ion-item>
+  <ion-list>
+    <ion-item *ngFor="let task of (tasks$ | async)" text-wrap>
+      <ion-checkbox slot="start" [(ngModel)]="task.status" (ionChange)="updateTaskStatus(task)"></ion-checkbox>
+      <ion-label text-wrap>{{ task.description }}</ion-label>
+      <ion-button slot="end" expand="block" shape="round" size="small" color="danger" (click)="deleteTask(task.id)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

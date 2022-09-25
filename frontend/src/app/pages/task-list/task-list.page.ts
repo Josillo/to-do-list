@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Task, TasksService } from 'src/app/services';
 import { AddTaskModalComponent } from './add-task-modal';
 
@@ -9,15 +9,17 @@ import { AddTaskModalComponent } from './add-task-modal';
   templateUrl: './task-list.page.html',
   styleUrls: ['./task-list.page.scss'],
 })
-export class TaskListPage implements OnInit {
+export class TaskListPage implements OnInit, OnDestroy {
 
   public pageTitle = 'To Do List';
-  public tasks$: Observable<Task[]> = this.tasksService.tasksList$;
+  public tasks: Task[] = [];
+
+  private unsubscribe$: Subject<any> = new Subject();
 
   constructor(private tasksService: TasksService, private toastController: ToastController, private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    this.tasksService.getTasks();
+    this.refreshTasks();
   }
 
   public deleteTask(id: string): void {
@@ -26,7 +28,7 @@ export class TaskListPage implements OnInit {
     }, (error) => { 
       this.presentToast('Error on delete', 'danger');
     });
-    this.tasksService.getTasks();
+    this.refreshTasks();
   }
 
   public updateTaskStatus(task: Task): void {
@@ -35,18 +37,22 @@ export class TaskListPage implements OnInit {
       this.presentToast('Update success', 'success');
     }, (error) => { 
       this.presentToast('Error on delete', 'danger');
-      this.tasksService.getTasks(); // In case of error we refresh our list to get stored values.
+      this.refreshTasks(); // In case of error we refresh our list to get stored values.
     });
   }
 
   private addTask(description: string): void {
     this.tasksService.addTask({description}).subscribe(data => {
       this.presentToast('Task added', 'success');
-      this.tasksService.getTasks();
+      this.refreshTasks();
     }, (error) => { 
       this.presentToast('An error happened while adding', 'danger');
     });
-    this.tasksService.getTasks();
+    this.refreshTasks();
+  }
+
+  private refreshTasks(): void {
+    this.tasksService.getTasks().subscribe(data => this.tasks = data);
   }
 
   async presentToast(message: string, type: 'danger' | 'success') {
@@ -71,6 +77,11 @@ export class TaskListPage implements OnInit {
     if (role === 'confirm') {
       this.addTask(data);
     }
+  }
+
+  ngOnDestroy(): void {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
   }
 
 }

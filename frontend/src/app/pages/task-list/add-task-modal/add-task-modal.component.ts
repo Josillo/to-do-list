@@ -22,4 +22,8 @@ export class AddTaskModalComponent implements OnInit {
     return this.modalCtrl.dismiss(this.description, 'confirm');
   }
 
+  public setInputDescription(event): void {
+    this.description = event.target.value;
+  }
+
 }

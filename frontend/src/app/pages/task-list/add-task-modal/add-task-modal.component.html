@@ -12,6 +12,6 @@
 <ion-content class="ion-padding">
   <ion-item>
     <ion-label position="stacked">Task description</ion-label>
-    <ion-input [(ngModel)]="description" placeholder="description..."></ion-input>
+    <ion-input (input)="setInputDescription($event)" placeholder="description..."></ion-input>
   </ion-item>
 </ion-content>

@@ -36,15 +36,28 @@ The rest of the dependencies will be installed directly using the package.json f
 
 1. Run the server with the MySQL database that you have choosen.
 2. Access the backend folder and install the required packages.
+
+```
     cd backed
     npm i
+```
 3. Run the backend API, it will drop the database.
+
+```
     node index.js
+```
 4. Access the frontend folder and install the packages.
+
+```
     cd ../frontend
     npm i
+```
+
 5. Run the ionic aplication
+
+```
     ionic serve
+```
 
 
 ## Authors

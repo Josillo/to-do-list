@@ -9,7 +9,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        status: { type: Sequelize.TINYINT(1), allowNull: false }
+        status: { type: Sequelize.TINYINT(1), allowNull: false },
+        filename: {
+            type: Sequelize.STRING,
+            allowNull: true
+        }
     });
 
     return Task;

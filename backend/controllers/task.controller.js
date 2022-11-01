@@ -10,7 +10,8 @@ exports.create = (req, res) => {
 
     const task = {
         description: req.body.description,
-        status: false
+        status: false,
+        filename: req.file ? req.file.filename : ""
     };
 
     Task.create(task)

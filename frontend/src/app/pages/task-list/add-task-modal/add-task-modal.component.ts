@@ -37,7 +37,9 @@ export class AddTaskModalComponent implements OnInit {
 
   takePhoto() {
     this.photoService.takePhoto().then(data => {
-      this.capturedPhoto = data.webPath;
+      if(data) {
+        this.capturedPhoto = data.webPath;
+      }
     });
   }
 

@@ -9,15 +9,19 @@ export class PhotoService {
 
   constructor() { }
 
-  public async takePhoto(): Promise<Photo> { 
+  public async takePhoto(): Promise<Photo | void> { 
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
-      source: CameraSource.Camera,
-      quality: 100
-    });
-
-    return capturedPhoto;
+    try {
+      const capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+        quality: 100
+      });
+      return capturedPhoto;
+    } catch(error) {
+      console.log("Take photo cancelled");
+    }
+    return null;
   }
 
   public async pickImage(): Promise<GalleryPhoto> {

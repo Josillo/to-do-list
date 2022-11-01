@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { TaskListPageRoutingModule } from './task-list-routing.module';
 
 import { TaskListPage } from './task-list.page';
-import { TasksService } from 'src/app/services';
+import { PhotoService, TasksService } from 'src/app/services';
+import { AddTaskModalComponent } from './add-task-modal';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { TasksService } from 'src/app/services';
     IonicModule,
     TaskListPageRoutingModule
   ],
-  declarations: [TaskListPage],
-  providers: [TasksService]
+  declarations: [TaskListPage, AddTaskModalComponent],
+  providers: [TasksService, PhotoService]
 })
 export class TaskListPageModule {}

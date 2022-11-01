@@ -31,7 +31,11 @@ export class TasksService {
 
   addTask(params: AddTaskEndpoint): Observable<any> {
     const url = BASE_URL + ADD_TASK_ENDPOINT;
-    return this.http.post(url, params);
+    let formData = new FormData(); 
+    for ( var key in params ) {
+      formData.append(key, params[key]);
+    }
+    return this.http.post(url, formData);
   }
 }
 

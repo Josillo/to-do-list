@@ -2,6 +2,7 @@ export interface Task {
     id: string;
     description: string;
     status: boolean | number; // Read --> true | 1; Unread --> false | 0
+    filename?: string;
 }
 
 export interface UpdateTaskEndpoint {
@@ -11,4 +12,5 @@ export interface UpdateTaskEndpoint {
 
 export interface AddTaskEndpoint {
     description: string;
+    file?: Blob;
 }

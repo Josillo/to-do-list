@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { PhotoService } from 'src/app/services';
+import { TaskAdd } from '../task-list.model';
 
 @Component({
   selector: 'app-add-task-modal',
@@ -8,9 +10,12 @@ import { ModalController } from '@ionic/angular';
 })
 export class AddTaskModalComponent implements OnInit {
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController, private photoService: PhotoService) { }
 
-  description: string;
+  public description: string;
+  public capturedPhoto: string = '';
+  private task: TaskAdd;
+
 
   ngOnInit() {}
 
@@ -19,11 +24,31 @@ export class AddTaskModalComponent implements OnInit {
   }
 
   confirm() {
-    return this.modalCtrl.dismiss(this.description, 'confirm');
+    this.task = {
+      description: this.description,
+      ...(this.capturedPhoto !== '' && { file: this.capturedPhoto }),
+    };
+    return this.modalCtrl.dismiss(this.task, 'confirm');
   }
 
   public setInputDescription(event): void {
     this.description = event.target.value;
+  }
+
+  takePhoto() {
+    this.photoService.takePhoto().then(data => {
+      this.capturedPhoto = data.webPath;
+    });
+  }
+
+  pickImage() {
+    this.photoService.pickImage().then(data => {
+      this.capturedPhoto = data.webPath;
+    });
+  }
+
+  discardImage() {
+    this.capturedPhoto = null;
   }
 
 }

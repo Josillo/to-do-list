@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button color="medium" (click)="cancel()" color="danger" shape="round"><ion-icon name="close"></ion-icon></ion-button>
     </ion-buttons>
     <ion-title>Add Task</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="confirm()">Confirm</ion-button>
+      <ion-button (click)="confirm()" color="success"  shape="round"><ion-icon name="checkmark"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,4 +14,30 @@
     <ion-label position="stacked">Task description</ion-label>
     <ion-input (input)="setInputDescription($event)" placeholder="description..."></ion-input>
   </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="takePhoto()" shape="round" color="tertiary">
+          <ion-icon slot="icon-only" name="camera"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col class="align-center">
+        <ion-button (click)="pickImage()" shape="round" color="tertiary">
+          <ion-icon slot="icon-only" name="image"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col class="align-end">
+        <ion-button (click)="discardImage()" shape="round" color="danger" [disabled]="!capturedPhoto">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <ion-img class="photo-frame" *ngIf="capturedPhoto" [src]="capturedPhoto" (click)="takePhoto()"></ion-img>
+        <ion-img class="photo-frame" *ngIf="!capturedPhoto" src="assets/images/thumbnail.svg"
+          (click)="takePhoto()"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

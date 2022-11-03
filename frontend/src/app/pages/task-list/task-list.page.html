@@ -18,7 +18,15 @@
       <ion-icon name="information-circle" slot="start"></ion-icon>Add your first task to the list</ion-item>
     <ion-item *ngFor="let task of tasks" text-wrap>
       <ion-checkbox slot="start" [checked]="task.status" (ionChange)="updateTaskStatus(task)" [(ngModel)]="task.status"></ion-checkbox>
-      <ion-label text-wrap>{{ task.description }}</ion-label>
+
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img alt="image-item" [src]="task.filename? imagesUrl + task.filename : 'assets/images/thumbnail.svg'" />
+        </ion-thumbnail>
+        <ion-label text-wrap>{{task.description}}</ion-label>
+      </ion-item>
+
+      <!-- <ion-label text-wrap>{{ task.description }}</ion-label> -->
       <ion-button slot="end" expand="block" shape="round" size="small" color="danger" (click)="deleteTask(task.id)"><ion-icon name="trash-outline"></ion-icon></ion-button>
     </ion-item>
   </ion-list>

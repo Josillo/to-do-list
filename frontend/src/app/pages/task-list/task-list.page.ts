@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
-import { Task, TasksService } from 'src/app/services';
+import { IMAGES_URL } from 'src/app/app.constants';
+import { AddTaskEndpoint, Task, TasksService } from 'src/app/services';
 import { AddTaskModalComponent } from './add-task-modal';
+import { TaskAdd } from './task-list.model';
 
 @Component({
   selector: 'app-task-list',
@@ -13,6 +15,7 @@ export class TaskListPage implements OnInit, OnDestroy {
 
   public pageTitle = 'To Do List';
   public tasks: Task[] = [];
+  public imagesUrl = IMAGES_URL;
 
   private unsubscribe$: Subject<any> = new Subject();
 
@@ -41,8 +44,17 @@ export class TaskListPage implements OnInit, OnDestroy {
     });
   }
 
-  private addTask(description: string): void {
-    this.tasksService.addTask({description}).subscribe(data => {
+  private async addTask(task: TaskAdd): Promise<void> {
+    let blob = null;
+      if (task.file) {
+        const response = await fetch(task.file);
+        blob = await response.blob();
+      }
+    const payload: AddTaskEndpoint = {
+      description: task.description,
+      ...(blob && {file: blob})
+    };
+    this.tasksService.addTask(payload).subscribe(data => {
       this.presentToast('Task added', 'success');
       this.refreshTasks();
     }, (error) => { 

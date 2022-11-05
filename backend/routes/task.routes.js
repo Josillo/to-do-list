@@ -6,7 +6,7 @@ module.exports = app => {
     var router = require('express').Router();
 
     // Create a task
-    router.post('/add', auth.isAuthenticated, upload.single('file'), tasks.create);
+    router.post('/add', [auth.isAuthenticated, upload.single('file')], tasks.create);
 
     // Retrieve all tasks
     router.get('/tasks', auth.isAuthenticated, tasks.findAll);

@@ -9,10 +9,18 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-toolbar color="primary">
-          <ion-title class="ion-text-center username-title">{{ (user$ | async)?.username }}</ion-title>
-          <ion-title class="ion-text-center">{{ (user$ | async)?.name }}</ion-title>
-        </ion-toolbar>
+        <ion-col>
+          <ion-toolbar color="primary">
+            <ion-title class="ion-text-center username-title">{{ (user$ | async)?.username }}</ion-title>
+          </ion-toolbar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-toolbar color="primary">
+            <ion-title class="ion-text-center">{{ (user$ | async)?.name }}</ion-title>
+          </ion-toolbar>
+        </ion-col>
       </ion-row>
     </ion-grid>
       

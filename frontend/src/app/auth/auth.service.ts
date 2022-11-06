@@ -7,6 +7,7 @@ import { User } from './user';
 import { Storage } from '@ionic/storage';
 import { AUTH_SERVER_ADDRESS } from './auth-service.endpoint';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user/user.service';
 
 
 @Injectable({
@@ -14,7 +15,11 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  constructor(private  httpClient:  HttpClient, private  storage:  Storage, private router: Router) { }
+  constructor(
+    private  httpClient:  HttpClient,
+    private  storage:  Storage,
+    private router: Router,
+    private userService: UserService) { }
 
   private getOptions(user: User){
     let base64UserAndPassword = window.btoa(user.username + ":" + user.password);
@@ -51,6 +56,7 @@ export class AuthService {
         if (res.user) {
           // await this.storage.set("token", res.access_token);
           localStorage.setItem('token', res.access_token);
+          this.userService.User$.next(res.user);
           this.router.navigate(['task-list']);
         }
       })
@@ -64,6 +70,7 @@ export class AuthService {
 
         if (res.user) {
           localStorage.setItem('token', res.access_token);
+          this.userService.User$.next(res.user);
           this.router.navigate(['task-list']);
           // await this.storage.set("token", res.access_token);
           // await this.storage.set("idUser", res.user.id);

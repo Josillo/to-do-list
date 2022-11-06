@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AUTH_SERVER_ADDRESS } from 'src/app/auth';
+import { User } from 'src/app/auth/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  public User$: BehaviorSubject<User> = new BehaviorSubject(null);
 
 
   constructor(private  httpClient:  HttpClient, private  storage:  Storage) { }

@@ -12,8 +12,6 @@ The frontend/ part is based on Ionic and contains the files needed to start the 
 
 The backend/ part contains our API built on top of ExpressJS and Sequelize. This part acts as an interface between the frontend application and the MySQL database.
 
-The backend API can also be tested using the postman requests https://www.postman.com/josean101/workspace/pgl/collection/3092222-77dfdcf4-9104-4cc0-be6f-8de0e71a2535?action=share&creator=3092222 
-
 
 ### Prerequisites
 
@@ -31,6 +29,16 @@ If the backend of the application is to be started in an environment other than 
 
 The rest of the dependencies will be installed directly using the package.json files included in the applications via the npm package manager.
 
+## Testing with Postman
+The backend API can also be tested using the postman requests https://www.postman.com/josean101/workspace/pgl/collection/3092222-77dfdcf4-9104-4cc0-be6f-8de0e71a2535?action=share&creator=3092222 
+
+1. In the TODO List collection are available all the request used in the application.
+2. All the request have already parameters pre-loaded, so for the request that authentication is not required (Create User, Sign In and Get User by Username), should be necessary just to click on the send button.
+3. For trying the requests with authentication is necessary to send the Create User request first.
+4. From the response of the Create User request, copy the value of the property "access_token".
+5. Go to the request that you are going to try and then open the Authorization tab.
+6. Set Bearer Token in the Type field and paste the copied token into the Token field.
+7. Now is possible to send the request meanwhile the token doesn't expires.
 
 ### Installing
 

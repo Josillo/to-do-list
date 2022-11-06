@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user/user.service';
 import { AuthService } from '../auth.service';
-import { User } from '../user';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +23,7 @@ export class RegisterPage implements OnInit {
 
   public checkingUsername: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService, private userService: UserService) { }
+  constructor(private router: Router, private authService: AuthService, private userService: UserService, private toastController: ToastController) { }
 
   ngOnInit() {
   }
@@ -42,8 +42,7 @@ export class RegisterPage implements OnInit {
   register() {
     const {confirm, ...user} = this.userForm.value;
     this.authService.register(user).subscribe((res) => {
-      console.info('registered');
-      // this.router.navigateByUrl('home');
+      this.presentToast('User registered', 'success');
     });
   }
 
@@ -53,6 +52,7 @@ export class RegisterPage implements OnInit {
     if(this.userForm.get('username').valid) {
       this.checkingUsername = true;
       const username = this.userForm.get('username').value;
+      // TODO: Remove delay, used only to test spinner
       this.userService.existsUser(username).pipe(delay(2002)).subscribe( exists => {
         this.checkingUsername = false;
         if(exists) {
@@ -76,6 +76,17 @@ export class RegisterPage implements OnInit {
       return false;
     }
  }
+
+ async presentToast(message: string, type: 'danger' | 'success') {
+  const toast = await this.toastController.create({
+    message,
+    duration: 1500,
+    position: 'bottom',
+    color: type
+  });
+
+  await toast.present();
+}
 
 }
 

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
-import { User } from '../user';
 
 @Component({
   selector: 'app-login',
@@ -11,43 +10,46 @@ import { User } from '../user';
 })
 export class LoginPage implements OnInit {
 
+  userForm: FormGroup = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
+  });
+
   constructor(
-    private router: Router, 
     private authService: AuthService, 
-    private alertController: AlertController) { }
+    private toastController: ToastController) { }
 
   ngOnInit() {
   }
 
-  login(form){
-    let user: User = {
-      id: null,
-      username: form.value.email,
-      password: form.value.password,
-      name: null,
-      isAdmin: null
-    };
+  onSubmit():void {
+    if(this.userForm.invalid) {
+      return;
+    }
+      this.login();
+  }
+
+  login(){
+    const user = this.userForm.value;
+    
     this.authService.login(user).subscribe((res)=>{
       if(!res.access_token) {
-        this.presentAlert("invalid credentials");
+        this.presentToast('Invalid credentials', 'danger');
         return;
       }
-      this.router.navigateByUrl('/you-are-logged-in');
-      form.reset();
     }, err => {
-      this.presentAlert("Error");
+      this.presentToast('Invalid credentials', 'danger');
     });
   }
 
-  async presentAlert(message: string) {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Error',
-      subHeader: message,
-      message: 'Could not login. Try again.',
-      buttons: ['OK']
+  async presentToast(message: string, type: 'danger' | 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 1500,
+      position: 'bottom',
+      color: type
     });
-
-    await alert.present();
+  
+    await toast.present();
   }
 }

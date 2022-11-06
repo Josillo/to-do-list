@@ -6,6 +6,7 @@ import { AuthResponse } from './auth-response';
 import { User } from './user';
 import { Storage } from '@ionic/storage';
 import { AUTH_SERVER_ADDRESS } from './auth-service.endpoint';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { AUTH_SERVER_ADDRESS } from './auth-service.endpoint';
 })
 export class AuthService {
 
-  constructor(private  httpClient:  HttpClient, private  storage:  Storage) { }
+  constructor(private  httpClient:  HttpClient, private  storage:  Storage, private router: Router) { }
 
   private getOptions(user: User){
     let base64UserAndPassword = window.btoa(user.username + ":" + user.password);
@@ -31,13 +32,26 @@ export class AuthService {
     return options;
   }
 
+  private getUnauthorizedOptions(){
+
+    let options = {
+      headers: {
+        'Content-Type' : 'application/json',
+      }
+    };
+
+    return options;
+  }
+
 
   register(user: User): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${AUTH_SERVER_ADDRESS}/api/users/`, user, this.getOptions(user)).pipe(
-      tap(async (res:  AuthResponse ) => {
+    return this.httpClient.post<AuthResponse>(`${AUTH_SERVER_ADDRESS}/api/users/`, user, this.getUnauthorizedOptions()).pipe(
+      tap((res:  AuthResponse ) => {
 
         if (res.user) {
-          await this.storage.set("token", res.access_token);
+          // await this.storage.set("token", res.access_token);
+          localStorage.setItem('token', res.access_token);
+          this.router.navigate(['task-list']);
         }
       })
 
@@ -46,10 +60,12 @@ export class AuthService {
 
   login(user: User): Observable<AuthResponse> {
     return this.httpClient.post(`${AUTH_SERVER_ADDRESS}/api/users/signin`, null, this.getOptions(user)).pipe(
-      tap(async (res: AuthResponse) => {
+      tap( (res: AuthResponse) => {
 
         if (res.user) {
-          await this.storage.set("token", res.access_token);
+          localStorage.setItem('token', res.access_token);
+          this.router.navigate(['task-list']);
+          // await this.storage.set("token", res.access_token);
           // await this.storage.set("idUser", res.user.id);
         }
       })

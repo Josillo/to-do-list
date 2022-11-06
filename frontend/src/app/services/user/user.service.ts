@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs';
 import { AUTH_SERVER_ADDRESS } from 'src/app/auth';
 
 @Injectable({
@@ -41,5 +42,9 @@ export class UserService {
     //       console.log(res);
     //     })
     // );
+  }
+
+  existsUser(username: string) {
+    return this.httpClient.get(`${AUTH_SERVER_ADDRESS}/api/users/user/${username}`);
   }
 }

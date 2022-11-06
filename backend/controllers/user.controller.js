@@ -93,6 +93,23 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find if a username exists
+exports.findOneByUsername = (req, res) => {
+  const username = req.params.username;
+
+  User.findOne({
+    where: { username }
+  })
+    .then(data => {
+      res.send(!!data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving User"
+      });
+    });
+};
+
 // Update a User by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

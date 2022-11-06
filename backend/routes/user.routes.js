@@ -12,6 +12,9 @@ module.exports = app => {
     
     // Retrieve a single User with id
     router.get("/:id", auth.isAuthenticated, users.findOne);
+    
+    // Retrieve whether usermane already exists
+    router.get("/user/:username", users.findOneByUsername);
   
     // Update a User with id
     router.put("/:id", auth.isAuthenticated, users.update);

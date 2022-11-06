@@ -1,0 +1,46 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>register</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content color="primary">
+  <form novalidate [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div text-center>
+            <h3>Create your account!</h3>
+          </div>
+          <div padding>
+            <ion-item>
+              <ion-label position="floating">Name *</ion-label>
+              <ion-input name="name" formControlName="name" type="text" placeholder="Name"></ion-input>
+              <span slot="error" *ngIf="userForm.get('name').touched && userForm.get('name').invalid">Name is required</span>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Username *</ion-label>
+              <ion-input name="username" formControlName="username" type="text" placeholder="Username" (ionChange)="checkUsername()" debounce="1000"></ion-input>
+              <span slot="error" *ngIf="userForm.get('username').touched && userForm.get('username').errors?.required">Username is required</span>
+              <span slot="error" *ngIf="userForm.get('username').touched && userForm.get('username').errors?.userExists">Username already exists</span>
+              <ion-spinner name="circular" slot="end" *ngIf="checkingUsername"></ion-spinner>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password *</ion-label>
+              <ion-input name="password" formControlName="password" type="password" placeholder="Password"></ion-input>
+              <span slot="error" *ngIf="userForm.get('password').touched && userForm.get('password').invalid">Password is required</span>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Confirm password *</ion-label>
+              <ion-input name="confirm" formControlName="confirm" type="password" placeholder="Confirm password"></ion-input>
+              <span slot="error" *ngIf="userForm.get('confirm').touched && userForm.get('confirm').invalid">This field does not match password field</span>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button size="large" type="submit" [disabled]="userForm.invalid" expand="block">Register</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

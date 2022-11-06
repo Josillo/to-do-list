@@ -35,7 +35,7 @@
     <ion-row class="ion-align-items-center">
       <ion-col>
         <ion-img class="photo-frame" *ngIf="capturedPhoto" [src]="capturedPhoto" (click)="takePhoto()"></ion-img>
-        <ion-chip color="warning" (click)="takePhoto()">
+        <ion-chip color="warning" (click)="takePhoto()" *ngIf="!capturedPhoto">
           <ion-icon name="camera" color="warning"></ion-icon>
           <ion-label>You can also attach an image to your task</ion-label>
           </ion-chip>

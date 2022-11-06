@@ -41,19 +41,34 @@ The rest of the dependencies will be installed directly using the package.json f
     cd backed
     npm i
 ```
-3. Run the backend API, it will drop the database.
+3. You need to create a .env file in the /backend folder with a key for the JWT and the data for the connection to your MySQL Server:
+```
+    JWT_SECRET=V3RY#1MP0RT@NT$3CR3T#
+
+    MYSQL_DATABASE=db_tasks
+    MYSQL_USER=root
+    MYSQL_PASSWORD=sasa
+    MYSQL_ROOT_PASSWORD=sasa
+
+    DB_HOST=localhost
+
+    NODE_ENV=development
+```
+4. Since empty folder are not present on git repository you will need to create a public/images folder on you backend folder.
+
+5. Run the backend API, it will drop the database.
 
 ```
     node index.js
 ```
-4. Access the frontend folder and install the packages.
+6. Access the frontend folder and install the packages.
 
 ```
     cd ../frontend
     npm i
 ```
 
-5. Run the ionic aplication
+7. Run the ionic aplication
 
 ```
     ionic serve

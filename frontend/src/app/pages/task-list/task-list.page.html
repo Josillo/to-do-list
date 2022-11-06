@@ -1,33 +1,76 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>{{ pageTitle }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-fab horizontal="end" vertical="top" slot="fixed" edge>
-    <ion-fab-button (click)="openAddModal()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  <ion-item>
-    <ion-label>Personal List:</ion-label>
-  </ion-item>
-  <ion-list>
-    <ion-item *ngIf="!tasks?.length"> 
-      <ion-icon name="information-circle" slot="start"></ion-icon>Add your first task to the list</ion-item>
-    <ion-item *ngFor="let task of tasks" text-wrap>
-      <ion-checkbox slot="start" [checked]="task.status" (ionChange)="updateTaskStatus(task)" [(ngModel)]="task.status"></ion-checkbox>
-
+<ion-menu contentId="main-content">
+  <ion-header class="header-menu">
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="3">
+          <ion-avatar class="avatar">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-toolbar color="primary">
+          <ion-title class="ion-text-center username-title">{{ (user$ | async)?.username }}</ion-title>
+          <ion-title class="ion-text-center">{{ (user$ | async)?.name }}</ion-title>
+        </ion-toolbar>
+      </ion-row>
+    </ion-grid>
+      
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
       <ion-item>
-        <ion-thumbnail slot="start">
-          <img alt="image-item" [src]="task.filename? imagesUrl + task.filename : 'assets/images/thumbnail.svg'" />
-        </ion-thumbnail>
-        <ion-label text-wrap>{{task.description}}</ion-label>
+        <ion-icon slot="start" name="options-outline"></ion-icon>
+        <ion-label>
+          Filters
+        </ion-label>
       </ion-item>
-
-      <!-- <ion-label text-wrap>{{ task.description }}</ion-label> -->
-      <ion-button slot="end" expand="block" shape="round" size="small" color="danger" (click)="deleteTask(task.id)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+      <ion-item (click)="logout()">
+        <ion-icon slot="start" name="exit-outline"></ion-icon>
+        <ion-label>
+          Logout
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button>
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </ion-menu-button>
+      </ion-buttons>
+      <ion-title>{{ pageTitle }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-fab horizontal="end" vertical="top" slot="fixed" edge>
+      <ion-fab-button (click)="openAddModal()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-item>
+      <ion-label>Personal List:</ion-label>
     </ion-item>
-  </ion-list>
-</ion-content>
+    <ion-list>
+      <ion-item *ngIf="!tasks?.length"> 
+        <ion-icon name="information-circle" slot="start"></ion-icon>Add your first task to the list</ion-item>
+      <ion-item *ngFor="let task of tasks" text-wrap>
+        <ion-checkbox slot="start" [checked]="task.status" (ionChange)="updateTaskStatus(task)" [(ngModel)]="task.status"></ion-checkbox>
+  
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img alt="image-item" [src]="task.filename? imagesUrl + task.filename : 'assets/images/thumbnail.svg'" />
+          </ion-thumbnail>
+          <ion-label text-wrap>{{task.description}}</ion-label>
+        </ion-item>
+  
+        <!-- <ion-label text-wrap>{{ task.description }}</ion-label> -->
+        <ion-button slot="end" expand="block" shape="round" size="small" color="danger" (click)="presentActionSheet(task)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</div>

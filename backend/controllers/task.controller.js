@@ -1,5 +1,5 @@
 const db = require('../models');
-const Task = db.tasks;
+const Task = db.task;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {

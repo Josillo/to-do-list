@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { IMAGES_URL } from 'src/app/app.constants';
 import { AddTaskEndpoint, Task, TasksService } from 'src/app/services';
+import { UserService } from 'src/app/services/user/user.service';
 import { AddTaskModalComponent } from './add-task-modal';
 import { TaskAdd } from './task-list.model';
 
@@ -19,7 +21,17 @@ export class TaskListPage implements OnInit, OnDestroy {
 
   private unsubscribe$: Subject<any> = new Subject();
 
-  constructor(private tasksService: TasksService, private toastController: ToastController, private modalCtrl: ModalController) { }
+  private loading;
+
+  user$ = this.userService.User$;
+
+  constructor(
+    private tasksService: TasksService,
+    private toastController: ToastController,
+    private modalCtrl: ModalController,
+    private userService: UserService,
+    private actionSheetCtrl: ActionSheetController,
+    private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
     this.refreshTasks();
@@ -28,10 +40,10 @@ export class TaskListPage implements OnInit, OnDestroy {
   public deleteTask(id: string): void {
     this.tasksService.deleteTask(id).subscribe(() => {
       this.presentToast('Delete success', 'success');
+      this.refreshTasks();
     }, (error) => { 
       this.presentToast('Error on delete', 'danger');
     });
-    this.refreshTasks();
   }
 
   public updateTaskStatus(task: Task): void {
@@ -60,11 +72,15 @@ export class TaskListPage implements OnInit, OnDestroy {
     }, (error) => { 
       this.presentToast('An error happened while adding', 'danger');
     });
-    this.refreshTasks();
   }
 
   private refreshTasks(): void {
-    this.tasksService.getTasks().subscribe(data => this.tasks = data);
+    this.showLoading();
+    //TODO: Remove delay, keep only to test loading
+    this.tasksService.getTasks().pipe(delay(2000)).subscribe(data => {
+      this.hideLoading();
+      this.tasks = data;
+      }, err => this.hideLoading());
   }
 
   async presentToast(message: string, type: 'danger' | 'success') {
@@ -90,6 +106,56 @@ export class TaskListPage implements OnInit, OnDestroy {
       this.addTask(data);
     }
   }
+
+  async presentActionSheet(task: Task) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Remove task',
+      subHeader: `Are you sure that you want to remove the task "${task.description}"?`,
+      buttons: [
+        {
+          text: 'Delete',
+          role: 'destructive',
+          data: {
+            action: 'delete',
+          },
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
+
+    const result = await actionSheet.onDidDismiss();
+    if(result?.data?.action === 'delete') {
+      this.deleteTask(task.id)
+    }
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+      cssClass: 'custom-loading',
+    });
+
+    this.loading.present();
+  }
+
+  hideLoading() {
+    this.loading.dismiss();
+  }
+
+
+  logout(): void {
+    localStorage.clear();
+    location.reload();
+  }
+
 
   ngOnDestroy(): void {
       this.unsubscribe$.next();
